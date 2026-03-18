@@ -2,6 +2,7 @@ import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { I18nProvider }      from "../shared/context/I18nContext.jsx";
 import { ToastProvider }     from "../shared/context/ToastContext.jsx";
 import { FacilityProvider }  from "../shared/context/FacilityContext.jsx";
+import { ThemeProvider }     from "../shared/context/ThemeContext.jsx";
 
 import { SelectSegmentPage } from "../pages/SelectSegmentPage.jsx";
 import { AppShell }          from "../shared/components/layout/AppShell.jsx";
@@ -51,10 +52,11 @@ import { HerbalInventoryPage } from "../modules/ayush/pages/HerbalInventoryPage.
 export function App() {
   return (
     <BrowserRouter>
-      <I18nProvider>
-        <ToastProvider>
-          <FacilityProvider>
-            <Routes>
+      <ThemeProvider>
+        <I18nProvider>
+          <ToastProvider>
+            <FacilityProvider>
+              <Routes>
               {/* Landing — segment picker */}
               <Route index element={<SelectSegmentPage />} />
 
@@ -109,10 +111,11 @@ export function App() {
 
               {/* Fallback */}
               <Route path="*" element={<Navigate to="/" replace />} />
-            </Routes>
-          </FacilityProvider>
-        </ToastProvider>
-      </I18nProvider>
+              </Routes>
+            </FacilityProvider>
+          </ToastProvider>
+        </I18nProvider>
+      </ThemeProvider>
     </BrowserRouter>
   );
 }
