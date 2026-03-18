@@ -1,23 +1,116 @@
 /**
- * StatCard — dashboard metric card.
+ * StatCard — Modern dashboard metric card with theme support.
  */
-import { TrendingUp } from "lucide-react";
+import { TrendingUp, TrendingDown, Minus } from "lucide-react";
 
-export function StatCard({ label, value, icon: Icon, accentClass = "border-l-teal-600", trend, subtext }) {
+export function StatCard({ 
+  label, 
+  value, 
+  icon: Icon, 
+  trend, 
+  trendValue,
+  subtext,
+  variant = "default",
+  className = ""
+}) {
+  const getTrendIcon = () => {
+    if (typeof trendValue === "number") {
+      if (trendValue > 0) return TrendingUp;
+      if (trendValue < 0) return TrendingDown;
+    }
+    return null;
+  };
+
+  const TrendIcon = getTrendIcon();
+
   return (
-    <div className={`bg-white rounded-xl p-5 border-l-4 ${accentClass} shadow-sm flex flex-col gap-1 min-w-0`}>
-      <div className="flex items-center justify-between">
-        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wide">{label}</span>
-        {Icon && <Icon size={18} className="text-slate-300" />}
+    <div 
+      className={`
+        relative overflow-hidden
+        bg-card rounded-2xl p-5 
+        border border-border
+        shadow-sm hover:shadow-md
+        transition-all duration-300
+        group card-hover
+        ${className}
+      `}
+    >
+      {/* Background gradient accent */}
+      <div 
+        className="absolute top-0 right-0 w-32 h-32 opacity-5 rounded-full -translate-y-1/2 translate-x-1/2 transition-transform group-hover:scale-110"
+        style={{ background: "var(--seg-gradient, linear-gradient(135deg, var(--primary), var(--chart-2)))" }}
+      />
+
+      <div className="relative flex flex-col gap-3">
+        {/* Header */}
+        <div className="flex items-center justify-between">
+          <span className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">
+            {label}
+          </span>
+          {Icon && (
+            <div 
+              className="w-10 h-10 rounded-xl flex items-center justify-center transition-transform group-hover:scale-110"
+              style={{ background: "var(--seg-bg, var(--muted))" }}
+            >
+              <Icon size={18} style={{ color: "var(--seg-primary, var(--primary))" }} />
+            </div>
+          )}
+        </div>
+
+        {/* Value */}
+        <div className="flex items-end gap-2">
+          <span className="text-3xl font-bold text-foreground tracking-tight">
+            {value}
+          </span>
+        </div>
+
+        {/* Trend or subtext */}
+        {(trend || trendValue !== undefined) && (
+          <div className="flex items-center gap-2">
+            {TrendIcon && (
+              <div className={`
+                flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-semibold
+                ${trendValue > 0 
+                  ? "bg-success/10 text-success" 
+                  : trendValue < 0 
+                    ? "bg-destructive/10 text-destructive"
+                    : "bg-muted text-muted-foreground"
+                }
+              `}>
+                <TrendIcon size={12} />
+                {Math.abs(trendValue)}%
+              </div>
+            )}
+            <span className="text-xs text-muted-foreground">{trend}</span>
+          </div>
+        )}
+
+        {subtext && !trend && (
+          <span className="text-xs text-muted-foreground">{subtext}</span>
+        )}
       </div>
-      <span className="text-2xl font-bold text-slate-800 truncate">{value}</span>
-      {subtext && <span className="text-xs text-slate-400">{subtext}</span>}
-      {trend !== undefined && (
-        <span className={`text-xs font-medium flex items-center gap-1 ${trend >= 0 ? "text-emerald-600" : "text-red-500"}`}>
-          <TrendingUp size={11} />
-          {Math.abs(trend)}% vs yesterday
-        </span>
+    </div>
+  );
+}
+
+/**
+ * MiniStatCard — Compact stat display
+ */
+export function MiniStatCard({ label, value, icon: Icon, className = "" }) {
+  return (
+    <div className={`flex items-center gap-3 p-3 rounded-xl bg-muted/50 ${className}`}>
+      {Icon && (
+        <div 
+          className="w-8 h-8 rounded-lg flex items-center justify-center shrink-0"
+          style={{ background: "var(--seg-bg, var(--muted))" }}
+        >
+          <Icon size={14} style={{ color: "var(--seg-primary, var(--primary))" }} />
+        </div>
       )}
+      <div className="min-w-0">
+        <p className="text-lg font-bold text-foreground truncate">{value}</p>
+        <p className="text-[10px] text-muted-foreground uppercase tracking-wide truncate">{label}</p>
+      </div>
     </div>
   );
 }

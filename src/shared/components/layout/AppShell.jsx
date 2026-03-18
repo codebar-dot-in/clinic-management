@@ -1,6 +1,6 @@
 /**
- * AppShell — master layout: sidebar + header + content area.
- * All module pages render inside <Outlet />.
+ * AppShell — Modern master layout with dark/light theme support.
+ * Features: sidebar + header + content area with smooth transitions.
  */
 import { useState } from "react";
 import { Outlet } from "react-router-dom";
@@ -8,35 +8,37 @@ import { Header } from "./Header.jsx";
 import { Sidebar } from "./Sidebar.jsx";
 import { ToastStack } from "../ui/Toast.jsx";
 import { useFacility } from "../../context/FacilityContext.jsx";
-import { SEGMENT_THEME } from "../../constants/tokens.js";
+import { useTheme } from "../../context/ThemeContext.jsx";
 
 export function AppShell() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const { facility } = useFacility();
+  const { theme } = useTheme();
 
-  const theme = facility?.segment ? SEGMENT_THEME[facility.segment] : SEGMENT_THEME.clinic;
+  const segment = facility?.segment || "clinic";
 
   return (
-    // CSS custom properties expose the segment theme to all child components
     <div
-      className="flex h-screen overflow-hidden bg-slate-50"
-      style={{
-        "--seg-primary": theme.primary,
-        "--seg-bg":      theme.bg,
-        "--seg-border":  theme.border,
-        "--seg-gradient": theme.gradient,
-      }}
+      className="flex h-screen overflow-hidden bg-background transition-colors duration-300"
+      data-segment={segment}
     >
+      {/* Sidebar */}
       <Sidebar open={sidebarOpen} onClose={() => setSidebarOpen(false)} />
 
+      {/* Main content area */}
       <div className="flex flex-col flex-1 min-w-0 overflow-hidden">
+        {/* Header */}
         <Header onMenuClick={() => setSidebarOpen(true)} />
 
-        <main className="flex-1 overflow-y-auto p-4 md:p-6">
-          <Outlet />
+        {/* Page content */}
+        <main className="flex-1 overflow-y-auto">
+          <div className="p-4 md:p-6 lg:p-8 max-w-[1600px] mx-auto">
+            <Outlet />
+          </div>
         </main>
       </div>
 
+      {/* Toast notifications */}
       <ToastStack />
     </div>
   );
