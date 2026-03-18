@@ -1,0 +1,24 @@
+@import "tailwindcss";
+
+/* ── Tamil font support ── */
+.font-tamil {
+  font-family: 'Noto Sans Tamil', 'Inter', system-ui, sans-serif;
+}
+
+/* ── Scrollbar ── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #f1f5f9; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+/* ── Sidebar transition ── */
+.sidebar-enter { transform: translateX(-100%); }
+.sidebar-enter-active { transform: translateX(0); transition: transform 200ms ease; }
+
+/* ── Print receipt area ── */
+@media print {
+  #medios-print-area {
+    display: block !important;
+    font-family: 'Inter', 'Noto Sans Tamil', sans-serif;
+  }
+}

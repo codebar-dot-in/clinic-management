@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MediOS — Healthcare Management</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Tamil:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+      html { font-family: 'Inter', 'Noto Sans Tamil', system-ui, sans-serif; }
+
+      /* ── Print: hide app shell, show only receipt ── */
+      @media print {
+        body > #root { display: none !important; }
+        #medios-print-area { display: block !important; }
+        #medios-print-area * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      }
+      #medios-print-area { display: none; }
+    </style>
+  </head>
+  <body>
+    <div id="root"></div>
+    <div id="medios-print-area"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
